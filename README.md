@@ -36,4 +36,11 @@ To maintain the flow of conversation and provide relevant responses, the system 
 To install the necessary dependencies, run:
 ```bash
 pip install -r requirements.txt
-
+```
+## Usage
+Open CMD from the directory where the repo is cloned
+```bash
+python app.py
+```
+While the app.py is running, in the browser, go to http://127.0.0.1:5000.
+That is the web application for InqIIITB
