@@ -4,5 +4,3 @@ langchain_chroma
 langchain-huggingface
 langchainhub
 flask
-gunicorn
-psycopg2
