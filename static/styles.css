@@ -1,0 +1,124 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #f8b195, #f67280);
+}
+
+.chat-container {
+    width: 90%;
+    max-width: 400px;
+    height: 90%;
+    max-height: 600px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.chat-box {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    border-bottom: 1px solid #ccc;
+    background: #f9f9f9;
+}
+
+.input-container {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background: #fff;
+}
+
+#user-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: border-color 0.3s;
+}
+
+#user-input:focus {
+    border-color: #9c27b0;
+    outline: none;
+}
+
+#submit-btn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #9c27b0;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#submit-btn i {
+    font-size: 16px;
+}
+
+#submit-btn:hover {
+    background-color: #7b1fa2;
+    transform: scale(1.1);
+}
+
+.message {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 70%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    word-wrap: break-word;
+}
+
+.message:hover {
+    transform: translateY(-2px);
+}
+
+.user-message {
+    background-color: #9c27b0;
+    color: #fff;
+    align-self: flex-end;
+    text-align: center;
+    background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+}
+
+.bot-message {
+    background-color: #e91e63;
+    color: #fff;
+    align-self: flex-start;
+    text-align: center;
+    background: linear-gradient(135deg, #e91e63, #c2185b);
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-icon {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #9c27b0;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -1,4 +1,5 @@
 import streamlit as st
+from rag_1 import get_rag_response  # Import the RAG system function
 
 # Set the page configuration
 st.set_page_config(page_title="RAG System Chat", page_icon=":robot_face:", layout="wide")
@@ -10,16 +11,37 @@ st.markdown(
     .stApp {
         background-color: #2e2e2e;
         color: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100vh;
     }
-    .stTextInput > div > div > input {
+    .chat-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+    }
+    .input-container {
+        display: flex;
+        align-items: center;
+        padding: 10px;
         background-color: #3e3e3e;
-        color: #f0f0f0;
+        border-radius: 10px;
     }
-    .stButton > button {
+    .input-container input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        margin-right: 10px;
         background-color: #4e4e4e;
         color: #f0f0f0;
     }
-    .stMarkdown {
+    .input-container button {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        background-color: #4e4e4e;
         color: #f0f0f0;
     }
     .user-message {
@@ -29,6 +51,8 @@ st.markdown(
         border-radius: 10px;
         margin: 5px;
         text-align: right;
+        align-self: flex-end;
+        max-width: 70%;
     }
     .bot-message {
         background-color: #3e3e3e;
@@ -37,24 +61,8 @@ st.markdown(
         border-radius: 10px;
         margin: 5px;
         text-align: left;
-    }
-    .input-container {
-        display: flex;
-        align-items: center;
-    }
-    .input-container input {
-        flex: 1;
-        padding: 10px;
-        border-radius: 10px;
-        border: none;
-        margin-right: 10px;
-    }
-    .input-container button {
-        padding: 10px;
-        border-radius: 10px;
-        border: none;
-        background-color: #4e4e4e;
-        color: #f0f0f0;
+        align-self: flex-start;
+        max-width: 70%;
     }
     </style>
     """,
@@ -74,18 +82,20 @@ def handle_input():
     if user_input:
         # Append user message to session state
         st.session_state.messages.append({"role": "user", "content": user_input})
-        # Here you would call your RAG system to get the response
-        response = "This is a placeholder response from the RAG system."
+        # Get response from the RAG system
+        response = get_rag_response(user_input)
         st.session_state.messages.append({"role": "bot", "content": response})
         # Clear the input box
         st.session_state.user_input = ""
 
 # Display chat messages
+st.markdown("<div class='chat-container'>", unsafe_allow_html=True)
 for message in st.session_state.messages:
     if message["role"] == "user":
         st.markdown(f"<div class='user-message'>{message['content']}</div>", unsafe_allow_html=True)
     else:
         st.markdown(f"<div class='bot-message'>{message['content']}</div>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
 # Input box for user questions
 st.markdown(
