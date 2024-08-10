@@ -25,4 +25,4 @@ def reset_session(session_id):
     pass
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5002)  # Change the port number if needed
+    app.run(debug=True)  # Change the port number if needed

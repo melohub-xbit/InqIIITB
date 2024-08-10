@@ -17,16 +17,9 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
 
-import logging
-
-logging.basicConfig(filename='rag_system.log', level=logging.INFO)
-print("Starting RAG system...")
-print("This is outside the call function")
-
 def process_rag_system(input_message, session_id):
-    print("Starting RAG system...")
 
-    ########################################################################################################
+    ######################################################################################################################################
     os.environ["LANGCHAIN_TRACING_V2"] = "true"
     os.environ["LANGCHAIN_API_KEY"] = "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"
 
@@ -39,39 +32,30 @@ def process_rag_system(input_message, session_id):
         huggingfacehub_api_token= "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",
     )
 
-    print("Set up the llm")
-    ########################################################################################################
+    ######################################################################################################################################
     # Load, chunk and index the contents of the blog.
     loader = PyMuPDFLoader("main_doc.pdf")
     docs = loader.load()
 
-    print("now splitting text")
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     splits = text_splitter.split_documents(docs)
 
-    print("storing to chroma")
     try:
-        print("In the try statement")
         if splits:
-            print("In the if statement")
             vectorstore = Chroma.from_documents(documents=splits, embedding=HuggingFaceEmbeddings())
-            print("Vectorstore created successfully")
         else:
             print("No valid splits found in the document.")
     except Exception as e:
-        print("In the except block")
         print(f"Error creating vectorstore: {e}")
         return "Error processing the document."
 
-    ########################################################################################################
-    print("docs loaded")
+    ######################################################################################################################################
 
     # Retrieve and generate using the relevant snippets of the blog.
     retriever = vectorstore.as_retriever()
 
-    print("retriever is set")
 
-    print("RAG system initialized.")    ### Contextualize question ###
+    ### Contextualize question ###
     contextualize_q_system_prompt = (
         "Given a chat history and the latest user question "
         "which might reference context in the chat history, "
@@ -92,7 +76,7 @@ def process_rag_system(input_message, session_id):
         llm, retriever, contextualize_q_prompt
     )
 
-
+    ######################################################################################################################################
     ### Answer question ###
     system_prompt = (
         "You are an assistant for question-answering tasks. "
@@ -113,9 +97,8 @@ def process_rag_system(input_message, session_id):
     question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
 
     rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
-    print("retriever and prompts set")
 
-
+    ######################################################################################################################################
     ### Statefully manage chat history ###
     store = {}
 
@@ -133,42 +116,15 @@ def process_rag_system(input_message, session_id):
         history_messages_key="chat_history",
         output_messages_key="answer",
     )
-    ########################################################################################################
+    ######################################################################################################################################
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
-    print("conv rag chain has been set")
-
-    print(f"Processing input: {input_message} for session: {session_id}")
-
-    # print("Welcome to InqIIITB! What do you want to know about?")
-
-    # user_prompt = "START"
-
-    # while (user_prompt != "END" and user_prompt != "BYE"):
-    #     user_ques = input("Your question here: ")
-    #     response = conversational_rag_chain.invoke(
-    #         {"input": user_ques},
-    #         config={
-    #             "configurable": {"session_id": "abc123"}
-    #         },  # constructs a key "abc123" in `store`.
-    #     )
-    #     print("Chat History:", get_session_history("abc123").messages)
-    #     print("Response:", response["answer"])
-    #     # print(response["answer"])
-    #     user_prompt = input("Enter END or BYE to end the conversation, or any thing else to continue: ")
-    #     if (user_prompt == "END" or user_prompt == "BYE"):
-    #         print("Thank you! Hope I answered your queries. Bye!")
-    print("invoking the chain")
     response = conversational_rag_chain.invoke(
         {"input": input_message},
         config={
             "configurable": {"session_id": session_id}
         }
     )
-    print(f"Generated Response:")
-    print(response["answer"])
-    print("RAG system initialized.")
 
     return response["answer"]
-    # return f"Processed: {input_message}"
 
