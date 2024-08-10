@@ -44,3 +44,6 @@ python app.py
 ```
 While the app.py is running, in the browser, go to http://127.0.0.1:5000.
 That is the web application for InqIIITB
+
+## Important note
+If when running app.py, there is an error about API key not being used, restart the device, and that fixes the error.
