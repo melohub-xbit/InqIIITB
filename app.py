@@ -17,7 +17,7 @@ def send_message():
         return jsonify({'response': response, 'follow_up': ''})
     else:
         response = rag_1.process_rag_system(user_input, session_id)
-        follow_up = "Do you want to continue or end the conversation? (Type 'END' or 'BYE' to end)"
+        follow_up = "Do you have any more queries? Or type 'END' or 'BYE' to end."
         return jsonify({'response': response, 'follow_up': follow_up})
 
 def reset_session(session_id):
